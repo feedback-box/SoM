@@ -39,8 +39,8 @@ opt_seem = load_opt_from_config_file(seem_cfg)
 opt_seem = init_distributed_seem(opt_seem)
 
 # Build models
-model_semsam = BaseModel(opt_semsam, build_model(opt_semsam)).from_pretrained(semsam_ckpt).eval().cuda()
-model_sam = sam_model_registry["vit_h"](checkpoint=sam_ckpt).eval().cuda()
-model_seem = BaseModel_Seem(opt_seem, build_model_seem(opt_seem)).from_pretrained(seem_ckpt).eval().cuda()
+model_semsam = BaseModel(opt_semsam, build_model(opt_semsam)).from_pretrained(semsam_ckpt).eval()
+model_sam = sam_model_registry["vit_h"](checkpoint=sam_ckpt).eval()
+model_seem = BaseModel_Seem(opt_seem, build_model_seem(opt_seem)).from_pretrained(seem_ckpt).eval()
 
 print("setup docker completed")
