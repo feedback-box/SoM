@@ -162,3 +162,5 @@ cython_debug/
 *.sw[m-p]
 
 output/
+
+module.json
