@@ -47,6 +47,9 @@ jobs:
           sudo rm -rf /opt/ghc &
           sudo rm -rf /opt/hostedtoolcache/CodeQL 
           sudo docker image prune --all --force &
+          sudo rm -rf /opt/ghc &
+          sudo rm -rf "/usr/local/share/boost" &
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY" &
 
       - name: Point docker dir to /mnt for space
         run: |
