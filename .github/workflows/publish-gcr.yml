@@ -8,8 +8,8 @@ on:
 
     tags:
 
-    paths:
-      - ./Dockerfile
+    # paths:
+    #   - ./Dockerfile
 
   pull_request:
     branches:
