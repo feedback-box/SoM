@@ -19,14 +19,6 @@ from semantic_sam.utils.arguments import load_opt_from_config_file
 from semantic_sam.utils.constants import COCO_PANOPTIC_CLASSES
 from semantic_sam.utils.dist import init_distributed_mode
 
-from task_adapter.sam.tasks.inference_sam_m2m_auto import \
-    inference_sam_m2m_auto
-from task_adapter.sam.tasks.inference_sam_m2m_interactive import \
-    inference_sam_m2m_interactive
-from task_adapter.seem.tasks import (inference_seem_interactive,
-                                     inference_seem_pano)
-from task_adapter.semantic_sam.tasks import inference_semsam_m2m_auto
-
 semsam_cfg = "configs/semantic_sam_only_sa-1b_swinL.yaml"
 seem_cfg = "configs/seem_focall_unicl_lang_v1.yaml"
 
