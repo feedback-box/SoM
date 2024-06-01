@@ -62,11 +62,12 @@ ENV GRADIO_SERVER_NAME="0.0.0.0"
 
 # sample run to cache the swin large patch4 pynode
 # RUN python app.py 
+RUN python setup-docker.py
+
 
 ENV HF_DATASETS_OFFLINE=1 
 ENV TRANSFORMERS_OFFLINE=1 
 
-RUN python setup-docker.py
 
 ENTRYPOINT [ "python", "app.py" ]
 # CMD [""]
