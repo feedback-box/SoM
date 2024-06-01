@@ -14,7 +14,7 @@
           "EnvironmentVariables": [
             "OUTPUT_DIR='/outputs'"
           ],
-          "Image": "ghcr.io/feedback-box/som:main",
+          "Image": "ghcr.io/feedback-box/som:ci-fix-no-disk-free",
           "Parameters": [
             "/inputs"
           ],
