@@ -36,8 +36,11 @@ jobs:
     runs-on: "ubuntu-latest"
 
     permissions:
-      contents: read
+      contents: write
       packages: write
+      actions: write
+      deployments: write
+      repository-projects: write
 
     steps:
       - name: Remove unnecessary
