@@ -1,3 +1,10 @@
+FROM alpine:latest as ckpt
+
+WORKDIR /app
+
+# Download pretrained models
+RUN sh download_ckpt.sh
+
 FROM nvidia/cuda:12.3.1-devel-ubuntu22.04
 
 # Install system dependencies
@@ -37,8 +44,10 @@ RUN pip install torch torchvision torchaudio --extra-index-url https://download.
   && pip install gradio==4.17.0 \
   && pip install fire
 
-# Download pretrained models
-RUN sh download_ckpt.sh
+
+# borrow downloaded ckpt
+COPY --from=ckpt /app .
+
 
 # Make port 6092 available to the world outside this container
 EXPOSE 6092
