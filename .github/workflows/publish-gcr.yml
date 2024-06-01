@@ -48,6 +48,27 @@ jobs:
           sudo rm -rf /opt/hostedtoolcache/CodeQL 
           sudo docker image prune --all --force &
 
+      - name: Point docker dir to /mnt for space
+        run: |
+          # Create the directory for Docker data
+          sudo mkdir /mnt/docker-data
+
+          # Stop Docker service
+          sudo systemctl stop docker
+
+          # Edit the Docker daemon configuration file
+          sudo bash -c 'cat > /etc/docker/daemon.json <<EOF
+          {
+            "data-root": "/mnt/docker-data"
+          }
+          EOF'
+
+          # Start Docker service
+          sudo systemctl start docker
+
+          # Verify the new Docker root directory
+          docker info | grep "Docker Root Dir"
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
