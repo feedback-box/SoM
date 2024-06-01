@@ -3,6 +3,8 @@ FROM alpine:latest as ckpt
 WORKDIR /app
 
 # Download pretrained models
+COPY download_ckpt.sh .
+
 RUN sh download_ckpt.sh
 
 FROM nvidia/cuda:12.3.1-devel-ubuntu22.04
