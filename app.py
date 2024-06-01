@@ -47,21 +47,13 @@ def inference(image_path, slider=2, mode='Automatic', alpha=0.1, label_mode='Num
 
     if slider < 1.5:
         model_name = 'seem'
-        model_seem = BaseModel_Seem(opt_seem, build_model_seem(opt_seem)).from_pretrained(seem_ckpt).eval().cuda() #FIXME: not working in bacalhau
-    
-        with torch.no_grad():
-            with torch.autocast(device_type='cuda', dtype=torch.float16):
-                model_seem.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(COCO_PANOPTIC_CLASSES + ["background"], is_eval=True)
-
         
     elif slider > 2.5:
         model_name = 'sam'
-        model_sam = sam_model_registry["vit_h"](checkpoint=sam_ckpt).eval().cuda()
 
     else:
         if mode == 'Automatic':
             model_name = 'semantic-sam'
-            model_semsam = BaseModel(opt_semsam, build_model(opt_semsam)).from_pretrained(semsam_ckpt).eval().cuda()
             
             if slider < 1.5 + 0.14:
                 level = [1]
@@ -80,6 +72,21 @@ def inference(image_path, slider=2, mode='Automatic', alpha=0.1, label_mode='Num
         else:
             model_name = 'sam'
             
+    print("model_name: ", model_name)
+    match model_name:
+        case 'seem':
+            model_seem = BaseModel_Seem(opt_seem, build_model_seem(opt_seem)).from_pretrained(seem_ckpt).eval().cuda() #FIXME: not working in bacalhau  
+            with torch.no_grad():
+                with torch.autocast(device_type='cuda', dtype=torch.float16):
+                    model_seem.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(COCO_PANOPTIC_CLASSES + ["background"], is_eval=True)
+
+        case 'sam':
+            model_sam = sam_model_registry["vit_h"](checkpoint=sam_ckpt).eval().cuda()
+        case 'semantic-sam':     
+            model_semsam = BaseModel(opt_semsam, build_model(opt_semsam)).from_pretrained(semsam_ckpt).eval().cuda()
+        case _:
+            raise ValueError(f"invalid model name : {model_name}")
+        
 
     if label_mode == 'Alphabet':
         label_mode = 'a'
