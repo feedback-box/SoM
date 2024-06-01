@@ -2,10 +2,7 @@
 print("setup docker started")
 
 import fire
-import numpy as np
-import torch
-from PIL import Image
-from scipy.ndimage import label
+
 from seem.modeling import build_model as build_model_seem
 # seem
 from seem.modeling.BaseModel import BaseModel as BaseModel_Seem
@@ -16,8 +13,7 @@ from semantic_sam import build_model
 # semantic sam
 from semantic_sam.BaseModel import BaseModel
 from semantic_sam.utils.arguments import load_opt_from_config_file
-from semantic_sam.utils.constants import COCO_PANOPTIC_CLASSES
-from semantic_sam.utils.dist import init_distributed_mode
+
 
 semsam_cfg = "configs/semantic_sam_only_sa-1b_swinL.yaml"
 seem_cfg = "configs/seem_focall_unicl_lang_v1.yaml"
