@@ -18,7 +18,7 @@
           ],
           "Image": "ghcr.io/feedback-box/som:sha-ca9d675",
           "Parameters": [
-            "/inputs",
+            "--image_path=/inputs",
             "--slider=2.6"
           ],
           "WorkingDirectory": "/app"
