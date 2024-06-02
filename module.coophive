@@ -19,7 +19,11 @@
           "Image": "ghcr.io/feedback-box/som:v0.2.0-rc1.1",
           "Parameters": [
             "/inputs",
-            {{if .cid}}"{{ subt "/inputs/%s" .cid }}" {{else}} "/inputs/QmUvN8GQ3ZLZLspaxpMVHGdpAAFbJ2SHRYxwQJUsyA1RiX"{{end}},
+            {{if .slider}}"{{ subt "%s" .slider }}" {{else}} "2.5"{{end}},
+            {{if .mode}}{{ .mode }} {{else}}"Automatic"{{end}},
+            {{if .alpha}}{{ .alpha }} {{else}}0.1{{end}},
+            {{if .label_mode}}{{ .label_mode }} {{else}}"Number"{{end}},
+            {{if .anno_mode}}{{ .anno_mode }} {{else}}"Mask Mark"{{end}},
           ],
           "WorkingDirectory": "/app"
         }
