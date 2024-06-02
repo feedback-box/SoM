@@ -33,10 +33,6 @@ semsam_ckpt = "./swinl_only_sam_many2many.pth"
 sam_ckpt = "./sam_vit_h_4b8939.pth"
 seem_ckpt = "./seem_focall_v1.pt"
 
-opt_semsam = load_opt_from_config_file(semsam_cfg)
-opt_seem = load_opt_from_config_file(seem_cfg)
-opt_seem = init_distributed_seem(opt_seem)
-
 # Build models
 # Don't cold start hennecessary
 
@@ -75,6 +71,8 @@ def inference(image_path, slider=2, mode='Automatic', alpha=0.1, label_mode='Num
     print("model_name: ", model_name)
     match model_name:
         case 'seem':
+            opt_seem = load_opt_from_config_file(seem_cfg)
+            opt_seem = init_distributed_seem(opt_seem)
             model_seem = BaseModel_Seem(opt_seem, build_model_seem(opt_seem)).from_pretrained(seem_ckpt).eval().cuda() #FIXME: not working in bacalhau  
             with torch.no_grad():
                 with torch.autocast(device_type='cuda', dtype=torch.float16):
@@ -83,6 +81,7 @@ def inference(image_path, slider=2, mode='Automatic', alpha=0.1, label_mode='Num
         case 'sam':
             model_sam = sam_model_registry["vit_h"](checkpoint=sam_ckpt).eval().cuda()
         case 'semantic-sam':     
+            opt_semsam = load_opt_from_config_file(semsam_cfg)
             model_semsam = BaseModel(opt_semsam, build_model(opt_semsam)).from_pretrained(semsam_ckpt).eval().cuda()
         case _:
             raise ValueError(f"invalid model name : {model_name}")

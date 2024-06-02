@@ -18,7 +18,8 @@
           ],
           "Image": "ghcr.io/feedback-box/som:v0.2.0-rc1.1",
           "Parameters": [
-            "/inputs"
+            "/inputs",
+            {{if .cid}}"{{ subt "/inputs/%s" .cid }}" {{else}} "/inputs/QmUvN8GQ3ZLZLspaxpMVHGdpAAFbJ2SHRYxwQJUsyA1RiX"{{end}},
           ],
           "WorkingDirectory": "/app"
         }
