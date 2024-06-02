@@ -138,6 +138,7 @@ def main(image_path="./examples/ironing_man.jpg", slider=2.7, mode='Automatic', 
             main(fp)
         return
     
+    print(f"{image_path} {slider} {mode} {alpha} {label_mode} {anno_mode}")
     
     imageName= os.path.basename(image_path)
     output = inference(image_path, slider, mode, alpha, label_mode, anno_mode)
