@@ -19,7 +19,7 @@
           "Image": "ghcr.io/feedback-box/som:sha-ca9d675",
           "Parameters": [
             "/inputs",
-            {{if .slider}}"{{ subt "-slider=%s" .slider }}" {{else}} "--slider=2.6"{{end}}
+            "--slider=2.6"
           ],
           "WorkingDirectory": "/app"
         }
