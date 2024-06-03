@@ -1,5 +1,3 @@
-# segmentation_cli.py
-
 import torch
 import numpy as np
 from scipy.ndimage import label
