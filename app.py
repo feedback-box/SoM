@@ -171,7 +171,7 @@ def main(image_path="./examples/ironing_man.jpg", slider=2.7, mode='Automatic', 
             delayed_calls.append(d)
 
     else:
-        d = process_image(fp, slider, mode, alpha, label_mode, anno_mode)
+        d = process_image(image_path, slider, mode, alpha, label_mode, anno_mode)
         delayed_calls.append(d)
     
     delayed_results = compute(*delayed_calls)
