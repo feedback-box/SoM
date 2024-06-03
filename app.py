@@ -130,7 +130,7 @@ output_dir = os.getenv('OUTPUT_DIR', './output')
 os.makedirs(output_dir, exist_ok=True)
 
 
-@delayed
+@delayed(pure=True)
 def process_image(image_path, slider, mode, alpha, label_mode, anno_mode):
     print(f"process_image {image_path} {slider} {mode} {alpha} {label_mode} {anno_mode}")
     
