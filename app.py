@@ -3,6 +3,9 @@ import numpy as np
 from scipy.ndimage import label
 import fire
 from PIL import Image
+import dask
+from dask import delayed, compute
+import os
 
 # seem
 from seem.modeling.BaseModel import BaseModel as BaseModel_Seem
@@ -30,9 +33,6 @@ seem_cfg = "configs/seem_focall_unicl_lang_v1.yaml"
 semsam_ckpt = "./swinl_only_sam_many2many.pth"
 sam_ckpt = "./sam_vit_h_4b8939.pth"
 seem_ckpt = "./seem_focall_v1.pt"
-
-# Build models
-# Don't cold start hennecessary
 
 @torch.no_grad()
 def inference(image_path, slider=2, mode='Automatic', alpha=0.1, label_mode='Number', anno_mode=['Mask', 'Mark']):
@@ -71,7 +71,7 @@ def inference(image_path, slider=2, mode='Automatic', alpha=0.1, label_mode='Num
         case 'seem':
             opt_seem = load_opt_from_config_file(seem_cfg)
             opt_seem = init_distributed_seem(opt_seem)
-            model_seem = BaseModel_Seem(opt_seem, build_model_seem(opt_seem)).from_pretrained(seem_ckpt).eval().cuda() #FIXME: not working in bacalhau  
+            model_seem = BaseModel_Seem(opt_seem, build_model_seem(opt_seem)).from_pretrained(seem_ckpt).eval().cuda()
             with torch.no_grad():
                 with torch.autocast(device_type='cuda', dtype=torch.float16):
                     model_seem.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(COCO_PANOPTIC_CLASSES + ["background"], is_eval=True)
@@ -83,7 +83,6 @@ def inference(image_path, slider=2, mode='Automatic', alpha=0.1, label_mode='Num
             model_semsam = BaseModel(opt_semsam, build_model(opt_semsam)).from_pretrained(semsam_ckpt).eval().cuda()
         case _:
             raise ValueError(f"invalid model name : {model_name}")
-        
 
     if label_mode == 'Alphabet':
         label_mode = 'a'
@@ -120,41 +119,37 @@ def inference(image_path, slider=2, mode='Automatic', alpha=0.1, label_mode='Num
 
         return output
 
-
-import os
-
 output_dir = os.getenv('OUTPUT_DIR', './output')
 os.makedirs(output_dir, exist_ok=True)
 
-# slider: granularity
-def main(image_path="./examples/ironing_man.jpg", slider=2.7, mode='Automatic', alpha=0.1, label_mode='Number', anno_mode=['Mask', 'Mark']):
-    if os.path.isdir(image_path):
-        print(f"{image_path} is a directory")
-        for file in os.listdir(image_path):
-            fp = os.path.join(image_path, file)
-            print(f"found {fp}")
-            try:
-                main(fp,slider,mode,alpha,label_mode, anno_mode)
-            except Exception as e:
-                print(f"main({fp}) failed with error : {e}")
-            
-        return
-    
-    print(f"{image_path} {slider} {mode} {alpha} {label_mode} {anno_mode}")
-    
-    imageName= os.path.basename(image_path)
+@delayed
+def process_image(image_path, slider, mode, alpha, label_mode, anno_mode):
+    print(f"Processing {image_path} {slider} {mode} {alpha} {label_mode} {anno_mode}")
     output = inference(image_path, slider, mode, alpha, label_mode, anno_mode)
     
-    output_image:Image
+    image_name = os.path.basename(image_path)
+    output_image: Image
     
     if isinstance(output, np.ndarray):
         output_image = Image.fromarray(output)
     else:
         output_image = output
 
-    saveImageLoc = os.path.join(output_dir, f"seg-{imageName}")
-    output_image.save(saveImageLoc)
-    print(f"save image in {saveImageLoc}")
+    save_image_loc = os.path.join(output_dir, f"seg-{image_name}")
+    output_image.save(save_image_loc)
+    print(f"Saved image in {save_image_loc}")
+
+def main(image_path="./examples/ironing_man.jpg", slider=2.7, mode='Automatic', alpha=0.1, label_mode='Number', anno_mode=['Mask', 'Mark']):
+    if os.path.isdir(image_path):
+        tasks = []
+        print(f"{image_path} is a directory")
+        for file in os.listdir(image_path):
+            fp = os.path.join(image_path, file)
+            print(f"found {fp}")
+            tasks.append(process_image(fp, slider, mode, alpha, label_mode, anno_mode))
+        compute(*tasks)
+    else:
+        process_image(image_path, slider, mode, alpha, label_mode, anno_mode).compute()
 
 if __name__ == '__main__':
     fire.Fire(main)
