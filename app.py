@@ -1,3 +1,4 @@
+import logging
 import torch
 import numpy as np
 from scipy.ndimage import label
@@ -129,6 +130,7 @@ os.makedirs(output_dir, exist_ok=True)
 # slider: granularity
 def main(image_path="./examples/ironing_man.jpg", slider=2.7, mode='Automatic', alpha=0.1, label_mode='Number', anno_mode=['Mask', 'Mark']):
     if os.path.isdir(image_path):
+        cleanRun = True
         print(f"{image_path} is a directory")
         for file in os.listdir(image_path):
             fp = os.path.join(image_path, file)
@@ -136,8 +138,12 @@ def main(image_path="./examples/ironing_man.jpg", slider=2.7, mode='Automatic', 
             try:
                 main(fp,slider,mode,alpha,label_mode, anno_mode)
             except Exception as e:
-                print(f"main({fp}) failed with error : {e}")
-            
+                cleanRun = False
+                logging.exception(f"main({fp}) failed with error : {e}")
+        if not cleanRun:
+            print("one of the main failed")
+            raise ChildProcessError("one of the main failed")
+        
         return
     
     print(f"{image_path} {slider} {mode} {alpha} {label_mode} {anno_mode}")
