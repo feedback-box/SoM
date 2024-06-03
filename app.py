@@ -3,6 +3,9 @@ import numpy as np
 from scipy.ndimage import label
 import fire
 from PIL import Image
+import os
+import dask
+from dask.distributed import Client, LocalCluster
 
 # seem
 from seem.modeling.BaseModel import BaseModel as BaseModel_Seem
@@ -32,7 +35,7 @@ sam_ckpt = "./sam_vit_h_4b8939.pth"
 seem_ckpt = "./seem_focall_v1.pt"
 
 # Build models
-# Don't cold start hennecessary
+# Don't cold start if unnecessary
 
 @torch.no_grad()
 def inference(image_path, slider=2, mode='Automatic', alpha=0.1, label_mode='Number', anno_mode=['Mask', 'Mark']):
@@ -120,32 +123,16 @@ def inference(image_path, slider=2, mode='Automatic', alpha=0.1, label_mode='Num
 
         return output
 
-
-import os
-
 output_dir = os.getenv('OUTPUT_DIR', './output')
 os.makedirs(output_dir, exist_ok=True)
 
-# slider: granularity
-def main(image_path="./examples/ironing_man.jpg", slider=2.7, mode='Automatic', alpha=0.1, label_mode='Number', anno_mode=['Mask', 'Mark']):
-    if os.path.isdir(image_path):
-        print(f"{image_path} is a directory")
-        for file in os.listdir(image_path):
-            fp = os.path.join(image_path, file)
-            print(f"found {fp}")
-            try:
-                main(fp,slider,mode,alpha,label_mode, anno_mode)
-            except Exception as e:
-                print(f"main({fp}) failed with error : {e}")
-            
-        return
+def process_image(image_path, slider, mode, alpha, label_mode, anno_mode):
+    print(f"Processing {image_path} {slider} {mode} {alpha} {label_mode} {anno_mode}")
     
-    print(f"{image_path} {slider} {mode} {alpha} {label_mode} {anno_mode}")
-    
-    imageName= os.path.basename(image_path)
+    imageName = os.path.basename(image_path)
     output = inference(image_path, slider, mode, alpha, label_mode, anno_mode)
     
-    output_image:Image
+    output_image: Image
     
     if isinstance(output, np.ndarray):
         output_image = Image.fromarray(output)
@@ -154,7 +141,29 @@ def main(image_path="./examples/ironing_man.jpg", slider=2.7, mode='Automatic', 
 
     saveImageLoc = os.path.join(output_dir, f"seg-{imageName}")
     output_image.save(saveImageLoc)
-    print(f"save image in {saveImageLoc}")
+    print(f"Saved image in {saveImageLoc}")
+
+def main(image_path="./examples/ironing_man.jpg", slider=2.7, mode='Automatic', alpha=0.1, label_mode='Number', anno_mode=['Mask', 'Mark']):
+    if os.path.isdir(image_path):
+        print(f"{image_path} is a directory")
+        cluster = LocalCluster(n_workers=4, threads_per_worker=1)  # Adjust n_workers and threads_per_worker as needed
+        client = Client(cluster)
+
+        futures = []
+        for file in os.listdir(image_path):
+            fp = os.path.join(image_path, file)
+            print(f"Found {fp}")
+            futures.append(client.submit(process_image, fp, slider, mode, alpha, label_mode, anno_mode))
+        
+        results = client.gather(futures)
+        client.close()
+
+        # Check if any of the results raised an error
+        if any(isinstance(result, Exception) for result in results):
+            print("At least one of the tasks failed.")
+            exit(1)
+    else:
+        process_image(image_path, slider, mode, alpha, label_mode, anno_mode)
 
 if __name__ == '__main__':
     fire.Fire(main)
