@@ -26,6 +26,8 @@ from segment_anything import sam_model_registry
 from task_adapter.sam.tasks.inference_sam_m2m_auto import inference_sam_m2m_auto
 from task_adapter.sam.tasks.inference_sam_m2m_interactive import inference_sam_m2m_interactive
 
+import logging
+
 # Load configurations
 semsam_cfg = "configs/semantic_sam_only_sa-1b_swinL.yaml"
 seem_cfg = "configs/seem_focall_unicl_lang_v1.yaml"
@@ -157,11 +159,16 @@ def main(image_path="./examples/ironing_man.jpg", slider=2.7, mode='Automatic', 
         
         results = client.gather(futures)
         client.close()
-
-        # Check if any of the results raised an error
+        
+        for result in results:
+            if isinstance(result, Exception):
+                logging.exception(result)
+            # Check if any of the results raised an error
         if any(isinstance(result, Exception) for result in results):
-            print("At least one of the tasks failed.")
+            print("found error in one of the executions")
             exit(1)
+
+      
     else:
         process_image(image_path, slider, mode, alpha, label_mode, anno_mode)
 
