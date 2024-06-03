@@ -140,16 +140,21 @@ def process_image(image_path, slider, mode, alpha, label_mode, anno_mode):
     print(f"Saved image in {save_image_loc}")
 
 def main(image_path="./examples/ironing_man.jpg", slider=2.7, mode='Automatic', alpha=0.1, label_mode='Number', anno_mode=['Mask', 'Mark']):
+    tasks = []
+    
     if os.path.isdir(image_path):
-        tasks = []
         print(f"{image_path} is a directory")
         for file in os.listdir(image_path):
             fp = os.path.join(image_path, file)
             print(f"found {fp}")
-            tasks.append(process_image(fp, slider, mode, alpha, label_mode, anno_mode))
-        compute(*tasks)
+            pi = process_image(image_path, slider, mode, alpha, label_mode, anno_mode)
+            tasks.append(pi)
     else:
-        process_image(image_path, slider, mode, alpha, label_mode, anno_mode).compute()
+        pi = process_image(image_path, slider, mode, alpha, label_mode, anno_mode)
+        tasks.append(pi)
+        
+    compute(*tasks)
+    
 
 if __name__ == '__main__':
     fire.Fire(main)
