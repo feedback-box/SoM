@@ -16,7 +16,7 @@
             "HF_DATASETS_OFFLINE=0",
             "TRANSFORMERS_OFFLINE=0"
           ],
-          "Image": "ghcr.io/playback-network/som:sha-ca9d675",
+          "Image": "ghcr.io/playback-network/som:sha-aa7771a",
           "Parameters": [
             "/inputs",
             {{if .slider}}"{{ subt "%s" .slider }}"{{else}} "2.6"{{end}},
