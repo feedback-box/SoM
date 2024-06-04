@@ -13,5 +13,5 @@ som cid="QmPSwBPP1fBxTt56ZN6ZiqPo1gHYQ8iHRVaiEAn9k9ycWd":
   --input https://gateway.lighthouse.storage/ipfs/{{cid}}:/inputs  \
   ghcr.io/playback-network/som:v0.4.0 -- '/inputs' 2.6
 
-hive tag="v0.4.0-rc1": 
-  hive run github.com/playback-network/som:{{tag}} -i 
+hive tag="v0.4.0" cid="QmPSwBPP1fBxTt56ZN6ZiqPo1gHYQ8iHRVaiEAn9k9ycWd": 
+  hive run github.com/playback-network/som:{{tag}} -i url="https://gateway.lighthouse.storage/ipfs/{{cid}}"
