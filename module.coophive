@@ -16,7 +16,7 @@
           "HF_DATASETS_OFFLINE=0",
           "TRANSFORMERS_OFFLINE=0"
         ],
-        "Image": "ghcr.io/playback-network/som:sha-aa7771a",
+        "Image": "ghcr.io/playback-network/som:v0.5.0-alpha",
         "Parameters": [
           "/inputs",
           "2.6",
