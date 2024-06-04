@@ -6,61 +6,61 @@
   },
   "job": {
     "APIVersion": "V1beta1",
-    "Spec": {
-      "EngineSpec": {
-        "Type": "docker",
-        "Params": {
-          "Entrypoint": null,
-          "EnvironmentVariables": [
-            "OUTPUT_DIR=/outputs",
-            "HF_DATASETS_OFFLINE=0",
-            "TRANSFORMERS_OFFLINE=0"
-          ],
-          "Image": "ghcr.io/playback-network/som:v0.4.0-beta.coophive",
-          "Parameters": [
-            "/inputs",
-            {{if .slider}}"{{ printf "%s" .slider }}"{{else}}"2.6"{{end}},
-            {{if .mode}}{{ printf "%s" .mode }}{{else}}"Automatic"{{end}},
-            {{if .alpha}}{{ printf "%s" .alpha }}{{else}}"0.1"{{end}},
-            {{if .label_mode}}{{ printf "%s" .label_mode }}{{else}}"Number"{{end}},
-            {{if .anno_mode}}{{ printf "%s" .anno_mode }}{{else}}"Mask Mark"{{end}}
-          ],
-          "WorkingDirectory": "/app"
-        }
-      },
-      "PublisherSpec": {
-        "Type": "ipfs"
-      },
-      "Docker": {},
-      "Wasm": {
-        "EntryModule": {}
-      },
-      "Resources": {
-        "CPU": "3",
-        "Memory": "12gb",
-        "GPU": "1"
-      },
-      "Network": {
-        "Type": "None"
-      },
-      "Timeout": 3600,
-      "Inputs": [
-        {
-          "StorageSource": "urlDownload",
-          "Name": "rawImages",
-          "URL": {{if .url}}"{{.url}}"{{else}}"https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png"{{end}},
-          "Path": "/inputs"
-        }
-      ],
-      "Outputs": [
-        {
-          "Name": "outputs",
-          "Path": "/outputs"
-        }
-      ],
-      "Deal": {
-        "Concurrency": 1
+      "Spec": {
+    "EngineSpec": {
+      "Type": "docker",
+      "Params": {
+        "Entrypoint": null,
+        "EnvironmentVariables": [
+          "OUTPUT_DIR=/outputs",
+          "HF_DATASETS_OFFLINE=0",
+          "TRANSFORMERS_OFFLINE=0"
+        ],
+        "Image": "ghcr.io/playback-network/som:v0.5.0-alpha",
+        "Parameters": [
+          "/inputs",
+          "2.6",
+          "Automatic",
+          "0.1",
+          "Number",
+          "Mask Mark"
+        ],
+        "WorkingDirectory": "/app"
       }
+    },
+    "PublisherSpec": {
+      "Type": "Ipfs"
+    },
+    "Docker": {},
+    "Wasm": {
+      "EntryModule": {}
+    },
+    "Resources": {
+      "CPU": "3",
+      "Memory": "12gb",
+      "GPU": "1"
+    },
+    "Network": {
+      "Type": "None"
+    },
+    "Timeout": 3600,
+    "Inputs": [
+      {
+        "StorageSource": "URLDownload",
+        "Name": "rawImages",
+        "URL": "https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png",
+        "Path": "/inputs"
+      }
+    ],
+    "Outputs": [
+      {
+        "Name": "outputs",
+        "Path": "/outputs"
+      }
+    ],
+    "Deal": {
+      "Concurrency": 1
     }
+  }
   }
 }

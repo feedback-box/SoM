@@ -39,6 +39,9 @@ seem_ckpt = "./seem_focall_v1.pt"
 
 @torch.no_grad()
 def inference(image_path, slider=2, mode='Automatic', alpha=0.1, label_mode='Number', anno_mode=['Mask', 'Mark']):
+    print(f"inference {image_path} {slider} {mode} {alpha} {label_mode} {anno_mode}")
+
+    
     image = Image.open(image_path).convert('RGB')
     _mask = None  # Assuming no mask provided in CLI version
 
