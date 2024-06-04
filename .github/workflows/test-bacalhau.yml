@@ -57,7 +57,7 @@ jobs:
       - name: Get Tags
         id: get-tags
         run: |
-          tags="${{ steps.meta.outputs.tags }}"
+          tags=${{ steps.meta.outputs.tags }}
           echo tags are $tags
           tag=${tags[0]}
 
