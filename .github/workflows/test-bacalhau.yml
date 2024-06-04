@@ -1,18 +1,18 @@
 name: Test Bacalhau
 on:
-  # workflow_run:
-  #   workflows: ["Publish to GCR"]
-  #   types:
-  #     - completed
+  workflow_run:
+    workflows: ["Publish to GCR"]
+    types:
+      - completed
 
-  push:
-    branches:
-      - main
-      - ci/*
-      - deploy/*
-      - docker/*
-      - bugfix/*
-      - hotfix/*
+  # push:
+  #   branches:
+  #     - main
+  #     - ci/*
+  #     - deploy/*
+  #     - docker/*
+  #     - bugfix/*
+  #     - hotfix/*
 
 env:
   REGISTRY: ghcr.io
