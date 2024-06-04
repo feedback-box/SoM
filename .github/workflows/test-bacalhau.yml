@@ -2,6 +2,7 @@ name: Test Bacalhau
 on:
   workflow_run:
     workflows: ["Publish to GCR"]
+    branches:
     types:
       - completed
 
@@ -27,6 +28,7 @@ permissions:
 
 jobs:
   test-bacalhau:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: "ubuntu-latest"
 
     steps:
