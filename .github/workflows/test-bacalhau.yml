@@ -3,6 +3,13 @@ on:
   workflow_run:
     workflows: ["Publish to GCR"]
     branches:
+      - main
+      - ci/*
+      - deploy/*
+      - docker/*
+      - bugfix/*
+      - hotfix/*
+
     types:
       - completed
 
