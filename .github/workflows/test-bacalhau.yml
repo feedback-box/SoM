@@ -43,17 +43,13 @@ jobs:
             ${{env.IMAGE}}/${{github.repository}}
 
           tags: |
-            # set latest tag for main branch
-            # type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
-
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,format=short
 
             type=ref,event=branch
             type=ref,event=tag
             type=ref,event=pr
 
             type=schedule
-            type=sha,format=short
 
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -63,7 +59,7 @@ jobs:
         run: |
           tags="${{ steps.meta.outputs.tags }}"
           echo tags are $tags
-          tag=${tags[1]}
+          tag=${tags[0]}
 
           echo tag is $tag
 
