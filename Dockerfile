@@ -24,7 +24,7 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . .
 
-ENV FORCE_CUDA=0
+ENV FORCE_CUDA=1
 ENV OUTPUT_DIR='/outputs'
 ENV INPUT_DIR='/inputs'
 
