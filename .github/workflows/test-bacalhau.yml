@@ -1,7 +1,7 @@
 name: Test Bacalhau
 on:
   workflow_run:
-    workflows: ["Publish to GCR"]
+    workflows: [Publish to GCR]
     branches:
       - main
       - ci/*
