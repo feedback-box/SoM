@@ -63,8 +63,6 @@ jobs:
         run: |
           tags="${{ steps.meta.outputs.tags }}"
           echo tags are $tags
-          echo ${tags}[1]
-
           tag=${tags[1]}
 
           echo tag is $tag
