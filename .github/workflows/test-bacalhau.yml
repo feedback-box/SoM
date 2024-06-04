@@ -4,6 +4,16 @@ on:
     workflows: ["First Workflow"]
     types:
       - completed
+
+  push:
+    branches:
+      - main
+      - ci/*
+      - deploy/*
+      - docker/*
+      - bugfix/*
+      - hotfix/*
+
 env:
   REGISTRY: ghcr.io
   IMAGE: ghcr.io/${{github.repository_owner}}
