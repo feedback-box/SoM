@@ -12,6 +12,8 @@ on:
 
     types:
       - completed
+      - requested
+      - in_progress
 
   # push:
   #   branches:
