@@ -63,7 +63,7 @@ jobs:
         run: |
           tags="${{ steps.meta.outputs.tags }}"
           echo tags are $tags
-          echo $tags[0]
+          echo $tags[1]
       - name: Test module
         run: |
           bacalhau docker run --download \
@@ -71,4 +71,4 @@ jobs:
             --memory '12Gb' \
             --gpu 1 \
             --input https://gateway.lighthouse.storage/ipfs/QmPSwBPP1fBxTt56ZN6ZiqPo1gHYQ8iHRVaiEAn9k9ycWd:/inputs  \
-            ghcr.io/playback-network/som:${{ steps.get-tags.outputs.tag}} -- '/inputs' 2.7
+            ghcr.io/playback-network/som:${{ steps.get-tags.outputs.tag[1]}} -- '/inputs' 2.7
