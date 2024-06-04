@@ -63,13 +63,7 @@ jobs:
         run: |
           tags="${{ steps.meta.outputs.tags }}"
           echo tags are $tags
-          IFS=' ' read -r -a tags_array <<< "$tags"
-          for tag in "${tags_array[@]}"
-          do
-            echo "Tag: $tag"
-          done
-          echo try: ${{ steps.meta.outputs.tags[0] }}
-          echo
+          echo $tags[0]
       - name: Test module
         run: |
           bacalhau docker run --download \
