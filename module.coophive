@@ -19,11 +19,11 @@
           "Image": "ghcr.io/playback-network/som:v0.4.0-rc1",
           "Parameters": [
             "/inputs",
-            {{if .slider}}"{{ printf "%s" .slider }}"{{else}}"2.6"{{end}},
-            {{if .mode}}{{ printf "%s" .mode }}{{else}}"Automatic"{{end}},
-            {{if .alpha}}{{ printf "%s" .alpha }}{{else}}"0.1"{{end}},
-            {{if .label_mode}}{{ printf "%s" .label_mode }}{{else}}"Number"{{end}},
-            {{if .anno_mode}}{{ printf "%s" .anno_mode }}{{else}}"Mask Mark"{{end}}
+            {{if .slider}}"{{.slider }}"{{else}}"2.6"{{end}},
+            {{if .mode}}{{.mode }}{{else}}"Automatic"{{end}},
+            {{if .alpha}}"{{.alpha }}"{{else}}"0.1"{{end}},
+            {{if .label_mode}}{{.label_mode }}{{else}}"Number"{{end}},
+            {{if .anno_mode}}{{ .anno_mode }}{{else}}"Mask Mark"{{end}}
           ],
           "WorkingDirectory": "/app"
         }
