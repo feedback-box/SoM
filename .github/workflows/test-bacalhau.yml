@@ -63,7 +63,8 @@ jobs:
         run: |
           tags="${{ steps.meta.outputs.tags }}"
           echo tags are $tags
-          echo $tags[1]
+          echo ${tags}[1]
+
       - name: Test module
         run: |
           bacalhau docker run --download \
