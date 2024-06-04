@@ -147,7 +147,13 @@ def process_image(image_path, slider, mode, alpha, label_mode, anno_mode):
             output_image = output
 
         saveImageLoc = os.path.join(output_dir, f"seg-{imageName}")
-        output_image.save(saveImageLoc, format="png")
+        # ipfsMount don't include extension type
+        ext = os.path.splitext(saveImageLoc)[1].lower()
+        if not ext:
+            saveImageLoc+=".png"
+        
+        
+        output_image.save(saveImageLoc)
         print(f"Saved image in {saveImageLoc}")
         return None  # No exception occurred, return None
     except Exception as e:
