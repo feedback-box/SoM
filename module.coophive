@@ -36,8 +36,7 @@
       "EntryModule": {}
     },
     "Resources": {
-      "CPU": "3",
-      "Memory": "12gb",
+      "Memory": "12gb"
       "GPU": "1"
     },
     "Network": {
