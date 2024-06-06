@@ -47,16 +47,9 @@
         {
           "StorageSource": "URLDownload",
           "Name": "rawImages",
-          "URL": {
-            {if .url
-            }
-          }"{{.url}}"{
-            {else
-            }
-          }"https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png"{
-            {end
-            }
-          },
+          "StorageSource": "URLDownload",
+          "Name": "rawImages",
+          "URL": {{if .url}}"{{.url}}"{{else}}"https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png"{{end}},
           "Path": "/inputs"
         }
       ],
