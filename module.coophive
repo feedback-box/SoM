@@ -37,8 +37,7 @@
       },
       "Resources": {
         "CPU": "3",
-        "Memory": "8Gb",
-        "GPU": "1"
+        "Memory": "8Gb"
       },
       "Network": {
         "Type": "None"
