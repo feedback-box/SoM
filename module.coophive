@@ -36,7 +36,7 @@
         "EntryModule": {}
       },
       "Resources": {
-        "Memory": "12gb",
+        "Memory": "8Gb",
         "GPU": "1"
       },
       "Network": {
@@ -45,8 +45,6 @@
       "Timeout": 3600,
       "Inputs": [
         {
-          "StorageSource": "URLDownload",
-          "Name": "rawImages",
           "StorageSource": "URLDownload",
           "Name": "rawImages",
           "URL": {{if .url}}"{{.url}}"{{else}}"https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png"{{end}},
